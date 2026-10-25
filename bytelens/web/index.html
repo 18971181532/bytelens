@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bytelens — binary inspection workbench</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">◈</span>
+    <div>
+      <h1>BYTELENS</h1>
+      <span class="subtitle" id="fileName">loading…</span>
+    </div>
+  </div>
+  <div class="meta-pills" id="metaPills"></div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="overview">Overview</button>
+  <button class="tab" data-tab="hex">Hex</button>
+  <button class="tab" data-tab="strings">Strings</button>
+  <button class="tab" data-tab="structure">Structure</button>
+  <button class="tab" data-tab="map">Map</button>
+  <button class="tab" data-tab="compare">Compare</button>
+</nav>
+
+<main>
+  <!-- ============================ OVERVIEW ============================ -->
+  <section class="panel active" id="tab-overview">
+    <div class="grid two">
+      <div class="card">
+        <h2>Identification</h2>
+        <table class="kv" id="idTable"></table>
+        <div class="embedded" id="embedded"></div>
+      </div>
+      <div class="card">
+        <h2>Entropy</h2>
+        <div class="entropy-wrap">
+          <canvas id="gaugeCanvas" height="220"></canvas>
+          <div class="entropy-caption" id="entropyCaption"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Byte composition</h2>
+      <canvas id="compCanvas" height="120"></canvas>
+      <div class="legend" id="compLegend"></div>
+    </div>
+    <div class="card">
+      <h2>Hashes</h2>
+      <table class="kv" id="hashTable"></table>
+    </div>
+  </section>
+
+  <!-- ============================== HEX ============================== -->
+  <section class="panel" id="tab-hex">
+    <div class="card">
+      <div class="toolbar">
+        <label>offset <input type="number" id="hexOffset" value="0" min="0" step="256"></label>
+        <label>length <input type="number" id="hexLength" value="256" min="16" max="4096" step="16"></label>
+        <button id="hexGo">Go</button>
+        <button id="hexPrev">◀ Prev</button>
+        <button id="hexNext">Next ▶</button>
+        <span class="hint" id="hexInfo"></span>
+      </div>
+      <div class="hex-grid">
+        <div class="hex-head"><span class="off">offset</span><span class="hexbytes">00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F</span><span class="ascii">ascii</span></div>
+        <div id="hexBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ STRINGS ============================ -->
+  <section class="panel" id="tab-strings">
+    <div class="card">
+      <div class="toolbar">
+        <input type="search" id="stringSearch" placeholder="filter strings…">
+        <span class="hint" id="stringInfo"></span>
+        <button id="stringMore">Load more</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data" id="stringTable">
+          <thead><tr><th>offset</th><th>enc</th><th>len</th><th>value</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== STRUCTURE =========================== -->
+  <section class="panel" id="tab-structure">
+    <div class="card">
+      <h2>Address space</h2>
+      <canvas id="structCanvas" height="140"></canvas>
+      <div class="hint" id="structHint">hover a region to inspect</div>
+    </div>
+    <div class="card">
+      <h2>Regions</h2>
+      <div id="structMeta" class="struct-meta"></div>
+      <div class="table-wrap">
+        <table class="data" id="structTable">
+          <thead><tr><th>region</th><th>start</th><th>end</th><th>detail</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== MAP ============================== -->
+  <section class="panel" id="tab-map">
+    <div class="card">
+      <h2>Byte-class heatmap <span class="hint">(address → high-nibble bucket)</span></h2>
+      <canvas id="heatCanvas" height="260"></canvas>
+    </div>
+    <div class="card">
+      <h2>Sliding-window entropy</h2>
+      <canvas id="entropyCanvas" height="180"></canvas>
+    </div>
+    <div class="card">
+      <h2>256-byte frequency histogram</h2>
+      <canvas id="histCanvas" height="200"></canvas>
+    </div>
+  </section>
+
+  <!-- ============================ COMPARE ============================ -->
+  <section class="panel" id="tab-compare">
+    <div class="card">
+      <div class="toolbar">
+        <input type="text" id="otherPath" placeholder="absolute path to second file…">
+        <button id="compareGo">Compare</button>
+        <span class="hint" id="compareStatus"></span>
+      </div>
+    </div>
+    <div id="compareResults" class="hidden">
+      <div class="grid two">
+        <div class="card"><h2>Summary</h2><table class="kv" id="compareKv"></table></div>
+        <div class="card"><h2>Similarity</h2><canvas id="simCanvas" height="200"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>Aligned difference density</h2>
+        <canvas id="diffCanvas" height="120"></canvas>
+        <div class="legend" id="diffLegend"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  Bytelens <span id="version"></span> · zero-dependency, runs entirely on your machine
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

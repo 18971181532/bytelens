@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bytelens"
+version = "0.1.0"
+description = "Zero-dependency local binary inspection workbench: magic, entropy, byte histograms, strings, container structures, embedded-file carving and binary comparison with an interactive Canvas dashboard."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "遥か" }]
+keywords = ["binary", "reverse-engineering", "forensics", "entropy",
+            "hex", "carving", "ctf", "binwalk", "debugging"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+    "Topic :: Utilities",
+]
+dependencies = []
+
+[project.scripts]
+bytelens = "bytelens.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/18971181532/bytelens"
+Source = "https://github.com/18971181532/bytelens"
+
+[tool.setuptools]
+packages = ["bytelens"]
+
+[tool.setuptools.package-data]
+bytelens = ["web/*.html", "web/*.css", "web/*.js"]
